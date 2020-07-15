@@ -30,7 +30,12 @@ object MainConsumer extends App{
 
     override def onPartitionsAssigned(partitions: util.Collection[TopicPartition]): Unit = {
       //println("assigned partitions " + partitions)
-      consumer.seekToBeginning(partitions)
+      //consumer.seekToBeginning(partitions)
+      partitions.forEach(
+        consumer.seek(_,1000)
+      )
+
+      //consumer.seek()
 
 
       //for (partition <- partitions.asScala) {
@@ -43,18 +48,28 @@ object MainConsumer extends App{
   //consumer.poll(Duration.ofMillis(0))
   //consumer.seekToBeginning(Collections.singletonList(new TopicPartition("cc-idssg",0)))
 
+  var total = 0
   while (true) {
     val records = consumer.poll(Duration.ofMillis(1000L))
 
     var count = 0
     records.forEach(record => {
       count += 1
-      //println(record.key())
+      println(record.key())
       //println(record.offset())
-      //println(record.value())
+      println(record.value())
 
     })
-    println(count)
+    total += count
+
+    consumer.assignment().forEach(
+      consumer.seek(_,1000)
+    )
+
+
+    //consumer.seekToBeginning(  consumer.assignment())
+    //println(total)
+    //println(count)
 
   }
 
