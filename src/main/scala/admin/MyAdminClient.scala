@@ -28,6 +28,9 @@ object MyAdminClient extends App{
     val cr: ConfigResource = new ConfigResource(ConfigResource.Type.BROKER,"0");
     val dcr: DescribeConfigsResult = admin.describeConfigs(Collections.singleton(cr));
 
+    val test = dcr.all()
+    println(test)
+
     dcr.all().get().forEach((k, c) => {
       c.entries()
         .forEach(configEntry => {System.out.println(configEntry.name() + "= " + configEntry.value());});

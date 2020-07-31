@@ -14,7 +14,7 @@ object MainConsumer extends App{
   import scala.jdk.CollectionConverters._
 
   val props = new Properties()
-  props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+  props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:5000")
   props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
   props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
   props.put(ConsumerConfig.GROUP_ID_CONFIG,"111")
@@ -23,14 +23,21 @@ object MainConsumer extends App{
 
 
   val consumer = new KafkaConsumer[String, String](props)
-  consumer.subscribe(Collections.singletonList("cc-idssg"), new ConsumerRebalanceListener {
+
+  consumer.subscribe(Collections.singletonList("p0011-mapper-service"), new ConsumerRebalanceListener {
+  //consumer.subscribe(Collections.singletonList("cc-idssg"), new ConsumerRebalanceListener {
     override def onPartitionsRevoked(partitions: util.Collection[TopicPartition]): Unit = {
 
     }
 
     override def onPartitionsAssigned(partitions: util.Collection[TopicPartition]): Unit = {
       //println("assigned partitions " + partitions)
-      consumer.seekToBeginning(partitions)
+      //consumer.seekToBeginning(partitions)
+      //partitions.forEach(
+      //  consumer.seek(_,1000)
+      //)
+
+      //consumer.seek()
 
 
       //for (partition <- partitions.asScala) {
@@ -43,18 +50,28 @@ object MainConsumer extends App{
   //consumer.poll(Duration.ofMillis(0))
   //consumer.seekToBeginning(Collections.singletonList(new TopicPartition("cc-idssg",0)))
 
+  var total = 0
   while (true) {
     val records = consumer.poll(Duration.ofMillis(1000L))
 
     var count = 0
     records.forEach(record => {
       count += 1
-      //println(record.key())
+      println(record.key())
       //println(record.offset())
-      //println(record.value())
+      println(record.value())
 
     })
-    println(count)
+    total += count
+
+    //consumer.assignment().forEach(
+    //  consumer.seek(_,1000)
+    //)
+
+
+    //consumer.seekToBeginning(  consumer.assignment())
+    //println(total)
+    //println(count)
 
   }
 

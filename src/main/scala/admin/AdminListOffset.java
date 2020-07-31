@@ -22,13 +22,13 @@ public class AdminListOffset {
 
         //checking if topic already exists
         boolean alreadyExists = admin.listTopics().names().get().stream()
-                .anyMatch(existingTopicName -> existingTopicName.equals("cc-idssg"));
+                .anyMatch(existingTopicName -> existingTopicName.equals("cc-bla"));
         if (alreadyExists) {
             System.out.printf("topic already exits: %s%n", "cc-idssg");
         } else {
             //creating new topic
             System.out.printf("creating topic: %s%n", "cc-idssg");
-            NewTopic newTopic = new NewTopic("cc-idssg", 3, (short) 1);
+            NewTopic newTopic = new NewTopic("cc-bla", 3, (short) 1);
             admin.createTopics(Collections.singleton(newTopic)).all().get();
         }
 
