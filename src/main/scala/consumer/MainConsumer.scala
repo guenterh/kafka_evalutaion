@@ -33,18 +33,15 @@ object MainConsumer extends App{
     override def onPartitionsAssigned(partitions: util.Collection[TopicPartition]): Unit = {
       //println("assigned partitions " + partitions)
       //consumer.seekToBeginning(partitions)
-      //partitions.forEach(
-      //  consumer.seek(_,1000)
-      //)
+      partitions.forEach(
+        consumer.seek(_,1000)
+      )
 
       //consumer.seek()
-
 
       //for (partition <- partitions.asScala) {
       //  consumer.seek(partition,5000)
       //}
-
-
     }
   })
   //consumer.poll(Duration.ofMillis(0))
